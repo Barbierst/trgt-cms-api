@@ -1,0 +1,122 @@
+@startuml
+class Page {
+    Long id
+    String uuid
+    String title
+    String slug
+}
+
+class Menu {
+    Long id
+    String uuid
+    String name
+}
+
+class MenuItem {
+    Long id
+    String uuid
+    String title
+    String slug
+    Boolean isExternal
+}
+
+class Block {
+    Long id
+    String uuid
+    String title
+    String content
+    Image image
+    String buttonText
+    String buttonLink
+}
+
+class Setting {
+    Long id
+    String uuid
+    String key
+    String value
+}
+
+class SEO {
+    Long id
+    String uuid
+    String tile
+    String description
+}
+
+class Blog {
+    Long id
+    String uuid
+    String title
+    String content
+    Image image
+}
+
+class Project {
+    Long id
+    String uuid
+    String title
+    String content
+    String liveLink
+    String repoLink
+    Image image
+}
+
+class Tag {
+    Long id
+    String uuid
+    String tag
+}
+
+class Experience {
+    Long id
+    String uuid
+    Date startDate
+    Date endDate
+    String title
+    String company
+    String description
+}
+
+class Image {
+    Long id
+    String uuid
+    String title
+    String altText
+    String url
+}
+
+class User {
+    Long id
+    String uuid
+    String userName
+    String password
+}
+
+class Role {
+    Long id
+    String uuid
+    String title
+    Boolean canEdit
+    Boolean canDelete
+    Boolean canCreate
+}
+
+Menu --{ MenuItem
+
+Page --{ Block
+Page --- SEO
+
+Blog --- SEO
+Project --- SEO
+
+Tag }-{ Project
+Tag }-{ Blog
+Tag }-{ Page
+
+Image --{ Project
+Image --{ Blog
+Image --{ Page
+
+User }-- Role
+@enduml

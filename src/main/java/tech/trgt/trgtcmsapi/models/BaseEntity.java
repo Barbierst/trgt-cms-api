@@ -1,17 +1,11 @@
 package tech.trgt.trgtcmsapi.models;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 import java.io.Serializable;
 
-@Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
+@Data
 @MappedSuperclass
 public class BaseEntity implements Serializable {
 

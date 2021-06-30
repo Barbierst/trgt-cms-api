@@ -1,9 +1,6 @@
 package tech.trgt.trgtcmsapi.models;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -11,10 +8,7 @@ import javax.persistence.Lob;
 import javax.persistence.Table;
 import java.time.LocalDate;
 
-@Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
+@Data
 @Entity
 @Table(name = "experiences")
 public class Experience extends TitledEntity{

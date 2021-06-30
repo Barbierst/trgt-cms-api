@@ -1,17 +1,11 @@
 package tech.trgt.trgtcmsapi.models;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.Column;
 import javax.persistence.MappedSuperclass;
 
-@Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
+@Data
 @MappedSuperclass
 public class TitledEntity extends BaseEntity{
 

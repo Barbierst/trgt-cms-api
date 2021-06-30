@@ -25,7 +25,6 @@ class Block {
     String uuid
     String title
     String content
-    Image image
     String buttonText
     String buttonLink
 }
@@ -48,8 +47,8 @@ class Blog {
     Long id
     String uuid
     String title
+    String slug
     String content
-    Image image
 }
 
 class Project {
@@ -59,7 +58,6 @@ class Project {
     String content
     String liveLink
     String repoLink
-    Image image
 }
 
 class Tag {
@@ -114,9 +112,11 @@ Tag }-{ Project
 Tag }-{ Blog
 Tag }-{ Page
 
-Image --{ Project
-Image --{ Blog
-Image --{ Page
+Project }-- Image
+Blog }-- Image
+Page }-- Image
+
+Block }-- Image
 
 User }-- Role
 @enduml

@@ -19,8 +19,11 @@ public class Project extends TitledEntity{
     @Column(name = "repo_link")
     private String  repoLink;
 
-    @Transient
     @OneToOne
     @JoinColumn(name = "seo_id")
     private Seo seo;
+
+    @ManyToOne
+    @JoinColumn(name = "image_id")
+    private Image image;
 }

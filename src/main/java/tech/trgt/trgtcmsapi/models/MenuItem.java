@@ -15,7 +15,6 @@ public class MenuItem extends TitledEntity{
     @Column(name = "is_external")
     private Boolean isExternal;
 
-    @Transient
     @ManyToOne
     @JoinColumn(name = "menu_id")
     private Menu menu;

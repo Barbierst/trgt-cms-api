@@ -14,12 +14,14 @@ public class Page extends TitledEntity{
     @Column(name = "slug")
     private String slug;
 
-    @Transient
     @OneToOne
     @JoinColumn(name = "seo_id")
     private Seo seo;
 
-    @Transient
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "page")
     private Set<Block> blocks = new HashSet<>();
+
+    @ManyToOne
+    @JoinColumn(name = "image_id")
+    private Image image;
 }

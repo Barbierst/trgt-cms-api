@@ -11,7 +11,6 @@ import java.util.Set;
 @Table(name = "menus")
 public class Menu extends TitledEntity{
 
-    @Transient
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "menu")
     private Set<MenuItem> menuItems = new HashSet<>();
 }

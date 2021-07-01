@@ -19,10 +19,11 @@ public class Block extends TitledEntity{
     @Column(name = "button_link")
     private String buttonLink;
 
-    @Transient
     @ManyToOne
     @JoinColumn(name = "page_id")
     private Page page;
 
-
+    @ManyToOne
+    @JoinColumn(name = "image_id")
+    private Image image;
 }

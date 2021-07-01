@@ -19,4 +19,8 @@ public class Seo extends TitledEntity{
     @Transient
     @OneToOne(mappedBy = "blog")
     private Blog blog;
+
+    @Transient
+    @OneToOne(mappedBy = "project")
+    private Project project;
 }

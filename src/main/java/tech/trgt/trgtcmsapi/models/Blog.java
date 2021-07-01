@@ -16,8 +16,11 @@ public class Blog extends TitledEntity{
     @Column(name = "content")
     private String content;
 
-    @Transient
     @OneToOne
     @JoinColumn(name = "seo_id")
     private Seo seo;
+
+    @ManyToOne
+    @JoinColumn(name = "image_id")
+    private Image image;
 }

@@ -11,8 +11,8 @@ import javax.persistence.Table;
 @Table(name = "settings")
 public class Setting extends BaseEntity{
 
-    @Column(name = "key")
-    private String key;
+    @Column(name = "name")
+    private String name;
 
     @Column(name = "value")
     private String value;

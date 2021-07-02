@@ -11,4 +11,6 @@ public interface SettingMapper {
     SettingMapper INSTANCE = Mappers.getMapper(SettingMapper.class);
 
     SettingDto settingToSettingDto(Setting setting);
+
+    Setting settingDtoToSetting(SettingDto settingDto);
 }

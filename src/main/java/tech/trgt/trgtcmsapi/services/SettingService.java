@@ -8,4 +8,6 @@ public interface SettingService {
     List<SettingDto> getAllSettings();
 
     SettingDto getSettingByName(String name);
+
+    SettingDto createNewSetting(SettingDto settingDto);
 }

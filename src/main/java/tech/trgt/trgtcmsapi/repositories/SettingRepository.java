@@ -5,4 +5,5 @@ import tech.trgt.trgtcmsapi.models.Setting;
 
 public interface SettingRepository extends JpaRepository<Setting, Long> {
     Setting findByName(String name);
+    Setting findByUuid(String uuid);
 }

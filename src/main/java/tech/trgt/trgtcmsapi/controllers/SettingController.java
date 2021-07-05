@@ -23,13 +23,30 @@ public class SettingController {
         return new ResponseEntity<SettingListDto>(new SettingListDto(settingService.getAllSettings()), HttpStatus.OK);
     }
 
-    @GetMapping("{name}")
-    public ResponseEntity<SettingDto> getSettingByName(@PathVariable String name) {
-        return new ResponseEntity<SettingDto>(settingService.getSettingByName(name), HttpStatus.OK);
+    @GetMapping("{uuid}")
+    public ResponseEntity<SettingDto> getSettingUuid(@PathVariable String uuid) {
+        return new ResponseEntity<SettingDto>(settingService.getSettingByUuid(uuid), HttpStatus.OK);
     }
 
     @PostMapping
     public ResponseEntity<SettingDto> createNewSetting(@RequestBody SettingDto settingDto) {
         return new ResponseEntity<SettingDto>(settingService.createNewSetting(settingDto), HttpStatus.CREATED);
+    }
+
+    @PutMapping("{uuid}")
+    public ResponseEntity<SettingDto> updateSetting(@PathVariable String uuid, @RequestBody SettingDto settingDto) {
+        return new ResponseEntity<SettingDto>(settingService.updateSetting(uuid, settingDto), HttpStatus.OK);
+    }
+
+    @PatchMapping("{uuid}")
+    public ResponseEntity<SettingDto> patchSetting(@PathVariable String uuid, @RequestBody SettingDto settingDto) {
+        return new ResponseEntity<SettingDto>(settingService.patchSetting(uuid, settingDto), HttpStatus.OK);
+    }
+
+    @DeleteMapping("{uuid}")
+    public ResponseEntity<Void> deleteSetting(@PathVariable String uuid) {
+        settingService.deleteSettingByUuid(uuid);
+
+        return new ResponseEntity<Void>(HttpStatus.OK);
     }
 }

@@ -7,7 +7,13 @@ import java.util.List;
 public interface SettingService {
     List<SettingDto> getAllSettings();
 
-    SettingDto getSettingByName(String name);
+    SettingDto getSettingByUuid(String uuid);
 
     SettingDto createNewSetting(SettingDto settingDto);
+
+    SettingDto updateSetting(String uuid, SettingDto settingDto);
+
+    SettingDto patchSetting(String uuid, SettingDto settingDto);
+
+    void deleteSettingByUuid(String uuid);
 }

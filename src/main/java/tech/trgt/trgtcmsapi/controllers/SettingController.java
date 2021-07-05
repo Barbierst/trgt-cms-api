@@ -1,14 +1,12 @@
 package tech.trgt.trgtcmsapi.controllers;
 
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import tech.trgt.trgtcmsapi.dtos.SettingDto;
 import tech.trgt.trgtcmsapi.dtos.SettingListDto;
 import tech.trgt.trgtcmsapi.services.SettingService;
 
-@Controller
+@RestController
 @RequestMapping(SettingController.BASE_URL)
 public class SettingController {
     public static final String BASE_URL = "/api/v1/settings";
@@ -20,34 +18,38 @@ public class SettingController {
     }
 
     @GetMapping
-    public ResponseEntity<SettingListDto> getAllSettings() {
-        return new ResponseEntity<SettingListDto>(new SettingListDto(settingService.getAllSettings()), HttpStatus.OK);
+    @ResponseStatus(HttpStatus.OK)
+    public SettingListDto getAllSettings() {
+        return new SettingListDto(settingService.getAllSettings());
     }
 
     @GetMapping("{uuid}")
-    public ResponseEntity<SettingDto> getSettingUuid(@PathVariable String uuid) {
-        return new ResponseEntity<SettingDto>(settingService.getSettingByUuid(uuid), HttpStatus.OK);
+    @ResponseStatus(HttpStatus.OK)
+    public SettingDto getSettingUuid(@PathVariable String uuid) {
+        return settingService.getSettingByUuid(uuid);
     }
 
     @PostMapping
-    public ResponseEntity<SettingDto> createNewSetting(@RequestBody SettingDto settingDto) {
-        return new ResponseEntity<SettingDto>(settingService.createNewSetting(settingDto), HttpStatus.CREATED);
+    @ResponseStatus(HttpStatus.OK)
+    public SettingDto createNewSetting(@RequestBody SettingDto settingDto) {
+        return settingService.createNewSetting(settingDto);
     }
 
     @PutMapping("{uuid}")
-    public ResponseEntity<SettingDto> updateSetting(@PathVariable String uuid, @RequestBody SettingDto settingDto) {
-        return new ResponseEntity<SettingDto>(settingService.updateSetting(uuid, settingDto), HttpStatus.OK);
+    @ResponseStatus(HttpStatus.OK)
+    public SettingDto updateSetting(@PathVariable String uuid, @RequestBody SettingDto settingDto) {
+        return settingService.updateSetting(uuid, settingDto);
     }
 
     @PatchMapping("{uuid}")
-    public ResponseEntity<SettingDto> patchSetting(@PathVariable String uuid, @RequestBody SettingDto settingDto) {
-        return new ResponseEntity<SettingDto>(settingService.patchSetting(uuid, settingDto), HttpStatus.OK);
+    @ResponseStatus(HttpStatus.OK)
+    public SettingDto patchSetting(@PathVariable String uuid, @RequestBody SettingDto settingDto) {
+        return settingService.patchSetting(uuid, settingDto);
     }
 
     @DeleteMapping("{uuid}")
-    public ResponseEntity<Void> deleteSetting(@PathVariable String uuid) {
+    @ResponseStatus(HttpStatus.OK)
+    public void deleteSetting(@PathVariable String uuid) {
         settingService.deleteSettingByUuid(uuid);
-
-        return new ResponseEntity<Void>(HttpStatus.OK);
     }
 }

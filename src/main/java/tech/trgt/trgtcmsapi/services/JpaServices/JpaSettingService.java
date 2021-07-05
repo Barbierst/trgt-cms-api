@@ -6,6 +6,7 @@ import tech.trgt.trgtcmsapi.mappers.SettingMapper;
 import tech.trgt.trgtcmsapi.dtos.SettingDto;
 import tech.trgt.trgtcmsapi.models.Setting;
 import tech.trgt.trgtcmsapi.repositories.SettingRepository;
+import tech.trgt.trgtcmsapi.services.ResourceNotFoundException;
 import tech.trgt.trgtcmsapi.services.SettingService;
 
 import java.util.List;
@@ -30,7 +31,13 @@ public class JpaSettingService implements SettingService {
 
     @Override
     public SettingDto getSettingByUuid(String uuid) {
-        return settingMapper.settingToSettingDto(settingRepository.findByUuid(uuid));
+        Setting setting = settingRepository.findByUuid(uuid);
+
+        if (setting == null) {
+            throw new ResourceNotFoundException();
+        }
+
+        return settingMapper.settingToSettingDto(setting);
     }
 
     @Override
@@ -44,6 +51,11 @@ public class JpaSettingService implements SettingService {
     @Override
     public SettingDto updateSetting(String uuid, SettingDto settingDto) {
         Setting original = settingRepository.findByUuid(uuid);
+
+        if (original == null) {
+            throw new ResourceNotFoundException();
+        }
+
         Setting setting = settingMapper.settingDtoToSetting(settingDto);
         setting.setId(original.getId());
         setting.setUuid(original.getUuid());
@@ -54,6 +66,10 @@ public class JpaSettingService implements SettingService {
     @Override
     public SettingDto patchSetting(String uuid, SettingDto settingDto) {
         Setting setting = settingRepository.findByUuid(uuid);
+
+        if (setting == null) {
+            throw new ResourceNotFoundException();
+        }
 
         if (settingDto.getName() != null) {
             setting.setName(settingDto.getName());
@@ -77,6 +93,4 @@ public class JpaSettingService implements SettingService {
 
         return settingMapper.settingToSettingDto(savedSetting);
     }
-
-
 }

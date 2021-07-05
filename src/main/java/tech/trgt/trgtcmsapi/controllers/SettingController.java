@@ -9,8 +9,9 @@ import tech.trgt.trgtcmsapi.dtos.SettingListDto;
 import tech.trgt.trgtcmsapi.services.SettingService;
 
 @Controller
-@RequestMapping("/api/v1/settings")
+@RequestMapping(SettingController.BASE_URL)
 public class SettingController {
+    public static final String BASE_URL = "/api/v1/settings";
 
     private final SettingService settingService;
 

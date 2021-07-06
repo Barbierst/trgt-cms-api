@@ -6,6 +6,8 @@ import tech.trgt.trgtcmsapi.dtos.SettingDto;
 import tech.trgt.trgtcmsapi.dtos.SettingListDto;
 import tech.trgt.trgtcmsapi.services.SettingService;
 
+import javax.validation.Valid;
+
 @RestController
 @RequestMapping(SettingController.BASE_URL)
 public class SettingController {
@@ -31,13 +33,13 @@ public class SettingController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.OK)
-    public SettingDto createNewSetting(@RequestBody SettingDto settingDto) {
+    public SettingDto createNewSetting(@Valid @RequestBody SettingDto settingDto) {
         return settingService.createNewSetting(settingDto);
     }
 
     @PutMapping("{uuid}")
     @ResponseStatus(HttpStatus.OK)
-    public SettingDto updateSetting(@PathVariable String uuid, @RequestBody SettingDto settingDto) {
+    public SettingDto updateSetting(@Valid @PathVariable String uuid, @RequestBody SettingDto settingDto) {
         return settingService.updateSetting(uuid, settingDto);
     }
 

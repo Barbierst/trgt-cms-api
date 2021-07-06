@@ -19,6 +19,10 @@ public interface MenuMapper {
 
     MenuDto menuToMenuDto(Menu menu);
 
+    MenuItem menuItemDtoToMenuItem(MenuItemDto menuItemDto);
+
+    MenuItemDto menuItemToMenuItemDto(MenuItem menuItem);
+
     @Mapping(target = "menu")
     List<MenuItemDto> menuItemsToMenuItemDtos(List<MenuItem> menuItems);
 

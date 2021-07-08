@@ -3,13 +3,17 @@ package tech.trgt.trgtcmsapi.services.JpaServices;
 import org.springframework.stereotype.Service;
 import tech.trgt.trgtcmsapi.dtos.ProjectDto;
 import tech.trgt.trgtcmsapi.mappers.ProjectMapper;
+import tech.trgt.trgtcmsapi.models.Menu;
 import tech.trgt.trgtcmsapi.models.Project;
+import tech.trgt.trgtcmsapi.models.Seo;
 import tech.trgt.trgtcmsapi.repositories.ProjectRepository;
 import tech.trgt.trgtcmsapi.repositories.SeoRepository;
 import tech.trgt.trgtcmsapi.services.ProjectService;
 import tech.trgt.trgtcmsapi.services.ResourceNotFoundException;
 
+import javax.transaction.Transactional;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
@@ -19,7 +23,6 @@ public class JpaProjectService implements ProjectService {
     private final ProjectRepository projectRepository;
     private final SeoRepository seoRepository;
 
-
     public JpaProjectService(ProjectMapper projectMapper, ProjectRepository projectRepository, SeoRepository seoRepository) {
         this.projectMapper = projectMapper;
         this.projectRepository = projectRepository;
@@ -27,7 +30,7 @@ public class JpaProjectService implements ProjectService {
     }
 
     @Override
-    public List<ProjectDto> getAllProject() {
+    public List<ProjectDto> getAllProjects() {
         return projectRepository.findAll().stream().map(projectMapper::projectToProjectDto).collect(Collectors.toList());
     }
 
@@ -44,12 +47,45 @@ public class JpaProjectService implements ProjectService {
 
     @Override
     public ProjectDto createNewProject(ProjectDto projectDto) {
-        return null;
+        Project project = projectMapper.projectDtoToProject(projectDto);
+        project.setUuid(UUID.randomUUID().toString());
+
+        if (projectDto.getSeo() != null) {
+            Seo seo = projectMapper.seoDtoToSeo(projectDto.getSeo());
+            seo.setUuid(UUID.randomUUID().toString());
+
+            project.setSeo(seo);
+        }
+
+        return saveAndReturnDto(project);
     }
 
+
     @Override
+    @Transactional
     public ProjectDto updateProject(String uuid, ProjectDto projectDto) {
-        return null;
+        Project original = projectRepository.findByUuid(uuid);
+
+        if (original == null) {
+            throw new ResourceNotFoundException();
+        }
+
+        Project project = projectMapper.projectDtoToProject(projectDto);
+
+        project.setUuid(original.getUuid());
+        project.setId(original.getId());
+
+        if (projectDto.getSeo() != null) {
+            Seo originalSeo = original.getSeo();
+            Seo seo = projectMapper.seoDtoToSeo(projectDto.getSeo());
+
+            seo.setUuid(originalSeo.getUuid());
+            seo.setId(originalSeo.getId());
+
+            project.setSeo(seo);
+        }
+
+        return saveAndReturnDto(project);
     }
 
     @Override
@@ -58,7 +94,14 @@ public class JpaProjectService implements ProjectService {
     }
 
     @Override
+    @Transactional
     public void deleteProjectByUuid(String uuid) {
+        projectRepository.deleteByUuid(uuid);
+    }
 
+    private ProjectDto saveAndReturnDto(Project project) {
+        Project savedProject = projectRepository.save(project);
+
+        return projectMapper.projectToProjectDto(savedProject);
     }
 }

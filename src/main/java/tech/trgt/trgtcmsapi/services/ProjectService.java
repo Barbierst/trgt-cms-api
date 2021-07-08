@@ -5,7 +5,7 @@ import tech.trgt.trgtcmsapi.dtos.ProjectDto;
 import java.util.List;
 
 public interface ProjectService {
-    List<ProjectDto> getAllProject();
+    List<ProjectDto> getAllProjects();
 
     ProjectDto getProjectByUuid(String uuid);
 

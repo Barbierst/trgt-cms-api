@@ -19,7 +19,7 @@ public class Project extends TitledEntity{
     @Column(name = "repo_link")
     private String  repoLink;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "seo_id")
     private Seo seo;
 

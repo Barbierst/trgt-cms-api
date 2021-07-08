@@ -20,7 +20,6 @@ public class Seo extends TitledEntity{
     @OneToOne(mappedBy = "blog")
     private Blog blog;
 
-    @Transient
-    @OneToOne(mappedBy = "project")
+    @OneToOne(mappedBy = "seo")
     private Project project;
 }

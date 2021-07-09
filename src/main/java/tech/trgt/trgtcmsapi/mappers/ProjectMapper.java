@@ -16,6 +16,5 @@ public interface ProjectMapper {
     Project projectDtoToProject(ProjectDto projectDto);
 
     SeoDto seoDtoToSeo(Seo seo);
-
     Seo seoDtoToSeo(SeoDto seoDto);
 }

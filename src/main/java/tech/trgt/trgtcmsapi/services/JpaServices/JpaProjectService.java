@@ -2,6 +2,7 @@ package tech.trgt.trgtcmsapi.services.JpaServices;
 
 import org.springframework.stereotype.Service;
 import tech.trgt.trgtcmsapi.dtos.ProjectDto;
+import tech.trgt.trgtcmsapi.dtos.SeoDto;
 import tech.trgt.trgtcmsapi.mappers.ProjectMapper;
 import tech.trgt.trgtcmsapi.models.Menu;
 import tech.trgt.trgtcmsapi.models.Project;
@@ -89,8 +90,47 @@ public class JpaProjectService implements ProjectService {
     }
 
     @Override
+    @Transactional
     public ProjectDto patchProject(String uuid, ProjectDto projectDto) {
-        return null;
+        Project project = projectRepository.findByUuid(uuid);
+
+        if (project == null) {
+            throw new ResourceNotFoundException();
+        }
+
+        if (projectDto.getContent() != null) {
+            project.setContent(projectDto.getContent());
+        }
+        if (projectDto.getLiveLink() != null) {
+            project.setLiveLink(projectDto.getLiveLink());
+        }
+        if (projectDto.getRepoLink() != null) {
+            project.setRepoLink(projectDto.getRepoLink());
+        }
+        if (projectDto.getTitle() != null) {
+            project.setTitle(projectDto.getTitle());
+        }
+
+        if (projectDto.getSeo() != null) {
+            SeoDto seoDto = projectDto.getSeo();
+            Seo seo = project.getSeo();
+
+            if (seo == null) {
+                Seo newSeo = projectMapper.seoDtoToSeo(seoDto);
+                newSeo.setUuid(UUID.randomUUID().toString());
+
+                project.setSeo(newSeo);
+            } else {
+                if (seoDto.getTitle() != null) {
+                    seo.setTitle(seoDto.getTitle());
+                }
+                if (seoDto.getDescription() != null) {
+                    seo.setDescription(seoDto.getDescription());
+                }
+            }
+        }
+
+        return saveAndReturnDto(project);
     }
 
     @Override

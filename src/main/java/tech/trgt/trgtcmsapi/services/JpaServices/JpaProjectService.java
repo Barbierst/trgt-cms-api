@@ -2,15 +2,13 @@ package tech.trgt.trgtcmsapi.services.JpaServices;
 
 import org.springframework.stereotype.Service;
 import tech.trgt.trgtcmsapi.dtos.ProjectDto;
-import tech.trgt.trgtcmsapi.dtos.SeoDto;
 import tech.trgt.trgtcmsapi.mappers.ProjectMapper;
-import tech.trgt.trgtcmsapi.models.Menu;
 import tech.trgt.trgtcmsapi.models.Project;
 import tech.trgt.trgtcmsapi.models.Seo;
 import tech.trgt.trgtcmsapi.repositories.ProjectRepository;
-import tech.trgt.trgtcmsapi.repositories.SeoRepository;
 import tech.trgt.trgtcmsapi.services.ProjectService;
 import tech.trgt.trgtcmsapi.services.ResourceNotFoundException;
+import tech.trgt.trgtcmsapi.services.SeoService;
 
 import javax.transaction.Transactional;
 import java.util.List;
@@ -22,12 +20,12 @@ public class JpaProjectService implements ProjectService {
 
     private final ProjectMapper projectMapper;
     private final ProjectRepository projectRepository;
-    private final SeoRepository seoRepository;
+    private final SeoService seoService;
 
-    public JpaProjectService(ProjectMapper projectMapper, ProjectRepository projectRepository, SeoRepository seoRepository) {
+    public JpaProjectService(ProjectMapper projectMapper, ProjectRepository projectRepository, SeoService seoService) {
         this.projectMapper = projectMapper;
         this.projectRepository = projectRepository;
-        this.seoRepository = seoRepository;
+        this.seoService = seoService;
     }
 
     @Override
@@ -52,9 +50,7 @@ public class JpaProjectService implements ProjectService {
         project.setUuid(UUID.randomUUID().toString());
 
         if (projectDto.getSeo() != null) {
-            Seo seo = projectMapper.seoDtoToSeo(projectDto.getSeo());
-            seo.setUuid(UUID.randomUUID().toString());
-
+            Seo seo = seoService.createSeo(projectDto.getSeo());
             project.setSeo(seo);
         }
 
@@ -77,12 +73,7 @@ public class JpaProjectService implements ProjectService {
         project.setId(original.getId());
 
         if (projectDto.getSeo() != null) {
-            Seo originalSeo = original.getSeo();
-            Seo seo = projectMapper.seoDtoToSeo(projectDto.getSeo());
-
-            seo.setUuid(originalSeo.getUuid());
-            seo.setId(originalSeo.getId());
-
+            Seo seo = createOrPatchSeo(projectDto, project);
             project.setSeo(seo);
         }
 
@@ -112,22 +103,8 @@ public class JpaProjectService implements ProjectService {
         }
 
         if (projectDto.getSeo() != null) {
-            SeoDto seoDto = projectDto.getSeo();
-            Seo seo = project.getSeo();
-
-            if (seo == null) {
-                Seo newSeo = projectMapper.seoDtoToSeo(seoDto);
-                newSeo.setUuid(UUID.randomUUID().toString());
-
-                project.setSeo(newSeo);
-            } else {
-                if (seoDto.getTitle() != null) {
-                    seo.setTitle(seoDto.getTitle());
-                }
-                if (seoDto.getDescription() != null) {
-                    seo.setDescription(seoDto.getDescription());
-                }
-            }
+            Seo seo = createOrPatchSeo(projectDto, project);
+            project.setSeo(seo);
         }
 
         return saveAndReturnDto(project);
@@ -143,5 +120,18 @@ public class JpaProjectService implements ProjectService {
         Project savedProject = projectRepository.save(project);
 
         return projectMapper.projectToProjectDto(savedProject);
+    }
+
+    private Seo createOrPatchSeo(ProjectDto projectDto, Project project) {
+        Seo originalSeo = project.getSeo();
+
+        Seo seo;
+        if (originalSeo == null) {
+            seo = seoService.createSeo(projectDto.getSeo());
+        } else {
+            seo = seoService.patchSeo(originalSeo, projectDto.getSeo());
+        }
+
+        return seo;
     }
 }

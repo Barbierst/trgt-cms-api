@@ -18,7 +18,7 @@ public class StorageController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.OK)
-    public void uploadFile(@RequestParam("file") MultipartFile file) {
-        storageService.uploadFile(file);
+    public String uploadFile(@RequestParam("file") MultipartFile file) {
+        return storageService.uploadFile(file);
     }
 }

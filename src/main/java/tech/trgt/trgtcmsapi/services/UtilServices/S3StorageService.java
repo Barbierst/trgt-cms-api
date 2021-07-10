@@ -1,6 +1,7 @@
 package tech.trgt.trgtcmsapi.services.UtilServices;
 
 import com.amazonaws.services.s3.AmazonS3;
+import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -25,14 +26,17 @@ public class S3StorageService implements StorageService {
         this.s3Client = s3Client;
     }
 
-    public void uploadFile(MultipartFile file) {
-        String fileName = System.currentTimeMillis()+"_"+file.getOriginalFilename();
+    public String uploadFile(MultipartFile file) {
+        String fileName = System.currentTimeMillis()+"_"+file.getOriginalFilename()
+                .replaceAll(" ", "_");
 
         File newFile = convertMultiPartFileToFile(file);
-
-        s3Client.putObject(new PutObjectRequest(bucketName, fileName, newFile));
+        s3Client.putObject(new PutObjectRequest(bucketName, fileName, newFile)
+                .withCannedAcl(CannedAccessControlList.PublicRead));
 
         newFile.delete();
+
+        return "https://"+bucketName+".s3.amazonaws.com/"+fileName;
     }
 
     private File convertMultiPartFileToFile(MultipartFile file) {

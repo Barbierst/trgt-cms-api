@@ -3,8 +3,10 @@ package tech.trgt.trgtcmsapi.services.JpaServices;
 import org.springframework.stereotype.Service;
 import tech.trgt.trgtcmsapi.dtos.ProjectDto;
 import tech.trgt.trgtcmsapi.mappers.ProjectMapper;
+import tech.trgt.trgtcmsapi.models.Image;
 import tech.trgt.trgtcmsapi.models.Project;
 import tech.trgt.trgtcmsapi.models.Seo;
+import tech.trgt.trgtcmsapi.repositories.ImageRepository;
 import tech.trgt.trgtcmsapi.repositories.ProjectRepository;
 import tech.trgt.trgtcmsapi.services.ProjectService;
 import tech.trgt.trgtcmsapi.services.ResourceNotFoundException;
@@ -21,11 +23,13 @@ public class JpaProjectService implements ProjectService {
     private final ProjectMapper projectMapper;
     private final ProjectRepository projectRepository;
     private final SeoService seoService;
+    private final ImageRepository imageRepository;
 
-    public JpaProjectService(ProjectMapper projectMapper, ProjectRepository projectRepository, SeoService seoService) {
+    public JpaProjectService(ProjectMapper projectMapper, ProjectRepository projectRepository, SeoService seoService, ImageRepository imageRepository) {
         this.projectMapper = projectMapper;
         this.projectRepository = projectRepository;
         this.seoService = seoService;
+        this.imageRepository = imageRepository;
     }
 
     @Override
@@ -54,6 +58,11 @@ public class JpaProjectService implements ProjectService {
             project.setSeo(seo);
         }
 
+        if (projectDto.getImage() != null) {
+            Image image = imageRepository.findByUuid(projectDto.getImage().getUuid());
+            project.setImage(image);
+        }
+
         return saveAndReturnDto(project);
     }
 
@@ -72,10 +81,7 @@ public class JpaProjectService implements ProjectService {
         project.setUuid(original.getUuid());
         project.setId(original.getId());
 
-        if (projectDto.getSeo() != null) {
-            Seo seo = createOrPatchSeo(projectDto, project);
-            project.setSeo(seo);
-        }
+        setRelations(project, projectDto);
 
         return saveAndReturnDto(project);
     }
@@ -102,10 +108,7 @@ public class JpaProjectService implements ProjectService {
             project.setTitle(projectDto.getTitle());
         }
 
-        if (projectDto.getSeo() != null) {
-            Seo seo = createOrPatchSeo(projectDto, project);
-            project.setSeo(seo);
-        }
+        setRelations(project, projectDto);
 
         return saveAndReturnDto(project);
     }
@@ -120,6 +123,18 @@ public class JpaProjectService implements ProjectService {
         Project savedProject = projectRepository.save(project);
 
         return projectMapper.projectToProjectDto(savedProject);
+    }
+
+    private void setRelations(Project project, ProjectDto projectDto) {
+        if (projectDto.getSeo() != null) {
+            Seo seo = createOrPatchSeo(projectDto, project);
+            project.setSeo(seo);
+        }
+
+        if (projectDto.getImage() != null) {
+            Image image = imageRepository.findByUuid(projectDto.getImage().getUuid());
+            project.setImage(image);
+        }
     }
 
     private Seo createOrPatchSeo(ProjectDto projectDto, Project project) {

@@ -15,4 +15,6 @@ public class ProjectDto {
     private String repoLink;
 
     private SeoDto seo;
+
+    private ImageDto image;
 }

@@ -5,6 +5,7 @@ import tech.trgt.trgtcmsapi.dtos.ExperienceDto;
 import java.util.List;
 
 public interface ExperienceService {
+
     List<ExperienceDto> getAllExperiences();
 
     ExperienceDto getExperienceByUuid(String uuid);

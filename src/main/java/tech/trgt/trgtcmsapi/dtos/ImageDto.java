@@ -3,9 +3,10 @@ package tech.trgt.trgtcmsapi.dtos;
 import lombok.Data;
 
 @Data
-public class SeoDto {
+public class ImageDto {
+
     private String uuid;
     private String title;
-    private String description;
-    private String jajaja;
+    private String altText;
+    private String url;
 }

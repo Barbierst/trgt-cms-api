@@ -7,5 +7,4 @@ public class SeoDto {
     private String uuid;
     private String title;
     private String description;
-    private String jajaja;
 }

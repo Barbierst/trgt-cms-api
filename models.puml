@@ -6,20 +6,6 @@ class Page {
     String slug
 }
 
-class Menu {
-    Long id
-    String uuid
-    String name
-}
-
-class MenuItem {
-    Long id
-    String uuid
-    String title
-    String slug
-    Boolean isExternal
-}
-
 class Block {
     Long id
     String uuid
@@ -60,12 +46,6 @@ class Project {
     String repoLink
 }
 
-class Tag {
-    Long id
-    String uuid
-    String tag
-}
-
 class Experience {
     Long id
     String uuid
@@ -89,34 +69,36 @@ class User {
     String uuid
     String userName
     String password
+    Boolean isActive
+    Boolean isAdmin
 }
 
-class Role {
+class Menu {
+    Long id
+    String uuid
+    String name
+}
+
+class MenuItem {
     Long id
     String uuid
     String title
-    Boolean canEdit
-    Boolean canDelete
-    Boolean canCreate
+    String slug
+    Boolean isExternal
 }
+
+Page --{ Block
+
+SEO --- Page
+SEO --- Blog
+SEO --- Project
 
 Menu --{ MenuItem
 
-Page --{ Block
-Page --- SEO
-
-Blog --- SEO
-Project --- SEO
-
-Tag }-{ Project
-Tag }-{ Blog
-Tag }-{ Page
 
 Project }-- Image
 Blog }-- Image
 Page }-- Image
 
 Block }-- Image
-
-User }-- Role
 @enduml

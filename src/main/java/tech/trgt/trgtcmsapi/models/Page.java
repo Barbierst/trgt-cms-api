@@ -6,7 +6,11 @@ import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
 
-@Data
+@Setter
+@Getter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 @Entity
 @Table(name = "pages")
 public class Page extends TitledEntity{
@@ -14,7 +18,7 @@ public class Page extends TitledEntity{
     @Column(name = "slug")
     private String slug;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "seo_id")
     private Seo seo;
 

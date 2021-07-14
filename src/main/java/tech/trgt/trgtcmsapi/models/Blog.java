@@ -16,7 +16,7 @@ public class Blog extends TitledEntity{
     @Column(name = "content")
     private String content;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "seo_id")
     private Seo seo;
 

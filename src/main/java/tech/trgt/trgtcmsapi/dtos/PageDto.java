@@ -3,7 +3,7 @@ package tech.trgt.trgtcmsapi.dtos;
 import lombok.Data;
 
 import javax.validation.constraints.NotBlank;
-import java.util.List;
+import java.util.Set;
 
 @Data
 public class PageDto {
@@ -13,7 +13,7 @@ public class PageDto {
     @NotBlank(message = "Slug is required")
     private String slug;
 
-    private List<BlockDto> blocks;
+    private Set<BlockDto> blocks;
     private ImageDto image;
     private SeoDto seo;
 }

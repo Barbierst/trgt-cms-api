@@ -13,10 +13,7 @@ import tech.trgt.trgtcmsapi.services.ResourceNotFoundException;
 import tech.trgt.trgtcmsapi.services.SeoService;
 
 import javax.transaction.Transactional;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -67,11 +64,10 @@ public class JpaPageService implements PageService {
             page.setImage(image);
         }
 
-        PageDto savedPageDto = saveAndReturnDto(page);
         List<Block> blocks = createOrUpdateBlocks(pageDto, page);
-        savedPageDto.setBlocks(blocks.stream().map(pageMapper::blockToBlockDto).collect(Collectors.toList()));
+        page.setBlocks((Set<Block>) blocks);
 
-        return savedPageDto;
+        return saveAndReturnDto(page);
     }
 
     @Override
@@ -97,11 +93,10 @@ public class JpaPageService implements PageService {
             page.setImage(image);
         }
 
-        PageDto savedPageDto = saveAndReturnDto(page);
         List<Block> blocks = createOrUpdateBlocks(pageDto, page);
-        savedPageDto.setBlocks(blocks.stream().map(pageMapper::blockToBlockDto).collect(Collectors.toList()));
+        page.setBlocks((Set<Block>) blocks);
 
-        return savedPageDto;
+        return saveAndReturnDto(page);
     }
 
     @Override
@@ -144,8 +139,6 @@ public class JpaPageService implements PageService {
                 Image image = imageRepository.findByUuid(blockDto.getImageDto().getUuid());
                 block.setImage(image);
             }
-
-            blockRepository.save(block);
 
             blocks.add(block);
         });
